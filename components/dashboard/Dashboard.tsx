@@ -53,7 +53,8 @@ export default function Dashboard() {
                     />
                 ))}
             </div>
-            <TaskForm />
+            <TaskForm onAddTask={(newTask) => setTasks([...tasks, newTask])} />
+
             <TaskList tasks={tasks} />
         </div>
 

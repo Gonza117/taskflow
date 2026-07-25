@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 
-export default function TaskForm() {
+type TaskFormProps = {
+    onAddTask: (task: string) => void;
+};
+
+export default function TaskForm({ onAddTask }: TaskFormProps) {
     const [task, setTask] = useState("");
 
     return (
@@ -18,6 +22,16 @@ export default function TaskForm() {
                 onChange={(e) => setTask(e.target.value)}
                 className="w-full border rounded-lg px-4 py-2"
             />
+
+            <button onClick={() => {
+                    if (task.trim() === "") return;
+                        onAddTask(task);
+                        setTask("");
+                }}
+                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg"
+            >
+                Agregar
+            </button>
         </div>
     );
 }
