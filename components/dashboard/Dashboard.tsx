@@ -26,37 +26,47 @@ export default function Dashboard() {
     ]);
 
     const toggleTask = (id: number) => {
-    setTasks(
-        tasks.map((task) =>
-            task.id === id
-                ? { ...task, completed: !task.completed }
-                : task
-        )
-    );
-};
+        setTasks(
+            tasks.map((task) =>
+                task.id === id
+                    ? { ...task, completed: !task.completed }
+                    : task
+            )
+        );
+    };
+
+    const deleteTask = (id: number) => {
+        setTasks((prevTasks) =>
+            prevTasks.filter((task) => task.id !== id)
+        );
+    };
+
+    const completedTasks = tasks.filter((task) => task.completed).length;
+
+    const pendingTasks = tasks.filter((task) => !task.completed).length;
 
     const stats = [
-    {
-        title: "Proyectos",
-        value: 3,
-    },
+        {
+            title: "Proyectos",
+            value: 3,
+        },
 
-    {
-        title: "Tareas",
-        value: tasks.length,
-    },
+        {
+            title: "Tareas",
+            value: tasks.length,
+        },
+    
+        {
+            title: "Pendientes",
+            value: pendingTasks,
+        },
+    
+        {
+            title: "Completadas",
+            value: completedTasks,
+        },
+    ];
 
-    {
-        title: "Pendientes",
-        value: 7,
-    },
-
-    {
-        title: "Completadas",
-        value: 8,
-    },
-
-];
     return (
         <div>
             <h1 className="text-4xl font-bold text-slate-700">
@@ -89,8 +99,8 @@ export default function Dashboard() {
             <TaskList
                 tasks={tasks}
                 onToggleTask={toggleTask}
+                onDeleteTask={deleteTask}
             />
         </div>
-
     );
 }
