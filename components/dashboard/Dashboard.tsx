@@ -4,13 +4,36 @@ import { useState } from "react";
 import StatCard from "./StatCard";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
+import { Task } from "./types";
 
 export default function Dashboard() {
-    const [tasks, setTasks] = useState([
-        "Aprender React",
-        "Crear Navbar",
-        "Configurar GitHub",
+    const [tasks, setTasks] = useState<Task[]>([
+        {
+            id: 1,
+            text: "Aprender React",
+            completed: false,
+        },
+        {
+            id: 2,
+            text: "Crear Navbar",
+            completed: false,
+        },
+        {
+            id: 3,
+            text: "Configurar GitHub",
+            completed: false,
+        },
     ]);
+
+    const toggleTask = (id: number) => {
+    setTasks(
+        tasks.map((task) =>
+            task.id === id
+                ? { ...task, completed: !task.completed }
+                : task
+        )
+    );
+};
 
     const stats = [
     {
@@ -53,9 +76,20 @@ export default function Dashboard() {
                     />
                 ))}
             </div>
-            <TaskForm onAddTask={(newTask) => setTasks([...tasks, newTask])} />
-
-            <TaskList tasks={tasks} />
+            <TaskForm onAddTask={(newTask) =>
+                setTasks([...tasks,
+                {
+                    id: Date.now(),
+                    text: newTask,
+                    completed: false,
+                },
+                ])
+            }
+            />
+            <TaskList
+                tasks={tasks}
+                onToggleTask={toggleTask}
+            />
         </div>
 
     );
