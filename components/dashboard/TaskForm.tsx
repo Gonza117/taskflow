@@ -3,12 +3,13 @@ import { useState } from "react";
 import { Priority } from "./types";
 
 type TaskFormProps = {
-    onAddTask: (task: string, priority: Priority) => void;
+    onAddTask: (task: string, priority: Priority, dueDate: string) => void;
 };
 
 export default function TaskForm({ onAddTask }: TaskFormProps) {
     const [task, setTask] = useState("");
     const [priority, setPriority] = useState<Priority>("medium");
+    const [dueDate, setDueDate] = useState("");
 
     return (
         <div className="mt-10">
@@ -38,11 +39,19 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
                 <option value="high">🔴 Alta</option>
             </select>
 
+            <input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="w-full border rounded-lg px-4 py-2 mt-4"
+            />
+
             <button onClick={() => {
                     if (task.trim() === "") return;
-                        onAddTask(task, priority);
+                        onAddTask(task, priority, dueDate);
                         setTask("");
                         setPriority("medium");
+                        setDueDate("");
                 }}
                 className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg"
             >

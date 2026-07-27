@@ -1,33 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StatCard from "./StatCard";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
-import { Task, Filter } from "./types";
+import {Task, Filter,SortOption} from "./types";
 import FilterBar from "./FilterBar";
+import SearchBar from "./SearchBar";
+import SortBar from "./SortBar";
 
 export default function Dashboard() {
-    const [tasks, setTasks] = useState<Task[]>([
-        {
-            id: 1,
-            text: "Aprender React",
-            completed: false,
-            priority: "high",
-        },
-        {
-            id: 2,
-            text: "Crear Navbar",
-            completed: false,
-            priority: "medium",
-        },
-        {
-            id: 3,
-            text: "Configurar GitHub",
-            completed: false,
-            priority: "low",
-        },
-    ]);
+    const [tasks, setTasks] = useState<Task[]>(() => {
+        const savedTasks = localStorage.getItem("tasks");
+
+        if (savedTasks) {
+            return JSON.parse(savedTasks);
+        }
+
+        return [
+            {
+                id: 1,
+                text: "Aprender React",
+                completed: false,
+                priority: "high",
+                dueDate: "2026-08-15",
+            },
+
+            {
+                id: 2,
+                text: "Crear Navbar",
+                completed: false,
+                priority: "medium",
+                dueDate: "2021-02-14",
+            },
+
+            {
+                id: 3,
+                text: "Configurar GitHub",
+                completed: false,
+                priority: "low",
+                dueDate: "2024-12-20",
+            },
+
+        ];
+    });
 
 
     const toggleTask = (id: number) => {
@@ -63,7 +79,11 @@ export default function Dashboard() {
 
     const pendingTasks = tasks.filter((task) => !task.completed).length;
 
+    const [search, setSearch] = useState("");
+
     const [filter, setFilter] = useState<Filter>("all");
+
+    const [sortOption, setSortOption] = useState<SortOption>("newest");
 
 
     const stats = [
@@ -89,17 +109,25 @@ export default function Dashboard() {
     ];
 
     const filteredTasks = tasks.filter((task) => {
-        switch (filter) {
-            case "pending":
-                return !task.completed;
+        const matchesFilter =
+            filter === "all"
+                ? true
+                : filter === "completed"
+                ? task.completed
+                : !task.completed;
 
-            case "completed":
-                return task.completed;
+        const matchesSearch = task.text
+            .toLowerCase()
+            .includes(search.toLowerCase());
 
-            default:
-                return true;
-        }
+        return matchesFilter && matchesSearch;
     });
+
+    const sortedTasks = [...filteredTasks];
+
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
 
     return (
         <div>
@@ -122,7 +150,7 @@ export default function Dashboard() {
             </div>
 
             <TaskForm
-                onAddTask={(newTask, priority) =>
+                onAddTask={(newTask, priority,dueDate) =>
                     setTasks((prevTasks) => [
                         ...prevTasks,
                         {
@@ -130,9 +158,20 @@ export default function Dashboard() {
                             text: newTask,
                             completed: false,
                             priority,
+                            dueDate,
                         },
                     ])
                 }
+            />
+
+            <SearchBar
+                search={search}
+                onSearchChange={setSearch}
+            />
+
+            <SortBar
+                sortOption={sortOption}
+                onSortChange={setSortOption}
             />
 
             <FilterBar

@@ -58,6 +58,13 @@ export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: T
             </li>
         );
     }
+
+    const formatDate = (date: string) => {
+        if (!date) return "Sin fecha";
+
+        return new Date(date).toLocaleDateString("es-AR");
+    };
+
     return (
         <li
             onClick={() => onToggleTask(task.id)}
@@ -74,6 +81,9 @@ export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: T
                     </p>
                     <p className="text-sm mt-1">
                         {getPriorityLabel()}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                        📅 {formatDate(task.dueDate)}
                     </p>
                 </div>
             </span>
