@@ -124,6 +124,22 @@ export default function Dashboard() {
     });
 
     const sortedTasks = [...filteredTasks];
+    
+    switch (sortOption) {
+        case "newest":
+            sortedTasks.sort((a, b) => b.id - a.id);
+            break;
+
+        case "oldest":
+            sortedTasks.sort((a, b) => a.id - b.id);
+            break;
+
+        case "priority":
+            break;
+
+        case "dueDate":
+        break;
+    }
 
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -180,7 +196,7 @@ export default function Dashboard() {
             />
 
             <TaskList
-                tasks={filteredTasks}
+                tasks={sortedTasks}
                 onToggleTask={toggleTask}
                 onDeleteTask={deleteTask}
                 onEditTask={editTask}

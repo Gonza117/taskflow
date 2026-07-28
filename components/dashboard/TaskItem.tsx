@@ -62,8 +62,33 @@ export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: T
     const formatDate = (date: string) => {
         if (!date) return "Sin fecha";
 
-        return new Date(date).toLocaleDateString("es-AR");
+        const [year, month, day] = date.split("-");
+
+        return `${day}/${month}/${year}`;
     };
+
+    const getDueStatus = () => {
+        if (!task.dueDate) return null;
+
+        const today = new Date();
+        const due = new Date(task.dueDate);
+
+        // Ignoramos la hora para comparar solo la fecha
+        today.setHours(0, 0, 0, 0);
+        due.setHours(0, 0, 0, 0);
+
+        if (due < today) {
+            return "overdue";
+        }
+
+        if (due.getTime() === today.getTime()) {
+            return "today";
+        }
+
+        return "future";
+    };
+
+    const dueStatus = getDueStatus();
 
     return (
         <li
@@ -79,9 +104,23 @@ export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: T
                     <p>
                         {task.completed ? "✅" : "⬜"} {task.text}
                     </p>
+
                     <p className="text-sm mt-1">
                         {getPriorityLabel()}
                     </p>
+                    
+                    {dueStatus === "overdue" && (
+                        <p className="text-red-600 font-semibold">
+                            🔴 Vencida
+                        </p>
+                    )}
+
+                    {dueStatus === "today" && (
+                        <p className="text-yellow-600 font-semibold">
+                            🟡 Vence hoy
+                        </p>
+                    )}
+
                     <p className="text-sm text-gray-500">
                         📅 {formatDate(task.dueDate)}
                     </p>
