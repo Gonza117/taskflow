@@ -17,11 +17,11 @@ export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: T
     const getPriorityLabel = () => {
         switch (task.priority) {
             case "high":
-                return "🔴 Alta";
+                return "Alta";
             case "medium":
-                return "🟡 Media";
+                return "Media";
             case "low":
-                return "🟢 Baja";
+                return "Baja";
         }
     };
 
@@ -71,7 +71,12 @@ export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: T
         if (!task.dueDate) return null;
 
         const today = new Date();
-        const due = new Date(task.dueDate);
+
+        const [year, month, day] = task.dueDate
+            .split("-")
+            .map(Number);
+
+        const due = new Date(year, month - 1, day);
 
         // Ignoramos la hora para comparar solo la fecha
         today.setHours(0, 0, 0, 0);
@@ -90,61 +95,88 @@ export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: T
 
     const dueStatus = getDueStatus();
 
+    const getPriorityColor = () => {
+        switch (task.priority) {
+            case "high":
+                return "bg-red-100 text-red-700";
+
+            case "medium":
+                return "bg-yellow-100 text-yellow-700";
+
+            case "low":
+                return "bg-green-100 text-green-700";
+        }
+    };
+
     return (
         <li
             onClick={() => onToggleTask(task.id)}
-            className={`p-4 rounded-lg shadow cursor-pointer transition flex justify-between items-center ${
-                task.completed
-                    ? "bg-green-100 text-gray-500 line-through"
-                    : "bg-white"
+            className={`rounded-xl shadow-md border border-gray-200 p-5 transition hover:shadow-lg ${
+                task.completed 
+                ? "bg-green-50" 
+                : "bg-white"
             }`}
         >
-            <span>
+
+            {/* Primera fila */}
+            <div className="flex justify-between items-start">
+                {/* Texto */}
                 <div>
-                    <p>
+                    <p
+                        className={`text-lg font-medium ${
+                            task.completed 
+                            ? "line-through text-gray-500" 
+                            : ""
+                        }`}
+                    >
                         {task.completed ? "✅" : "⬜"} {task.text}
                     </p>
 
-                    <p className="text-sm mt-1">
-                        {getPriorityLabel()}
-                    </p>
-                    
                     {dueStatus === "overdue" && (
-                        <p className="text-red-600 font-semibold">
+                        <p className="text-red-600 font-semibold mt-3">
                             🔴 Vencida
                         </p>
                     )}
 
                     {dueStatus === "today" && (
-                        <p className="text-yellow-600 font-semibold">
+                        <p className="text-yellow-600 font-semibold mt-3">
                             🟡 Vence hoy
                         </p>
                     )}
-
-                    <p className="text-sm text-gray-500">
-                        📅 {formatDate(task.dueDate)}
-                    </p>
                 </div>
-            </span>
 
-            <div className="flex gap-3">
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setIsEditing(true);
-                    }}
-                >
-                    ✏️
-                </button>
+                {/* Botones */}
+                <div className="flex gap-3 text-xl mt-1">
+                    <button className="hover:scale-110 transition"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsEditing(true);
+                        }}
+                    >
+                        ✏️
+                    </button>
 
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onDeleteTask(task.id);
-                    }}
-                >
-                    🗑️
-                </button>
+                    <button className="hover:scale-110 transition"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteTask(task.id);
+                        }}
+                    >
+                        🗑️
+                    </button>
+                </div>
+            </div>
+
+            {/* Segunda fila */}
+            <div className="flex justify-between items-center mt-4">
+
+                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getPriorityColor()}`}>
+                    {getPriorityLabel()}
+                </span>
+
+                <p className="text-sm text-gray-500">
+                    📅 {formatDate(task.dueDate)}
+                </p>
             </div>
         </li>
     );
