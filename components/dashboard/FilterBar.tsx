@@ -15,8 +15,8 @@ export default function FilterBar({
                 onClick={() => onChangeFilter("all")}
                 className={`px-4 py-2 rounded-lg ${
                     filter === "all"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-200"
+                        ? "bg-blue-600 text-black"
+                        : "bg-gray-200 text-black"
                 }`}
             >
                 Todas
@@ -26,8 +26,8 @@ export default function FilterBar({
                 onClick={() => onChangeFilter("pending")}
                 className={`px-4 py-2 rounded-lg ${
                     filter === "pending"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-200"
+                        ? "bg-blue-600 text-black"
+                        : "bg-gray-200 text-black"
                 }`}
             >
                 Pendientes
@@ -37,8 +37,8 @@ export default function FilterBar({
                 onClick={() => onChangeFilter("completed")}
                 className={`px-4 py-2 rounded-lg ${
                     filter === "completed"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-200"
+                        ? "bg-blue-600 text-black"
+                        : "bg-gray-200 text-black"
                 }`}
             >
                 Completadas

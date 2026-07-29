@@ -1,13 +1,14 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import StatCard from "./StatCard";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
-import {Task, Filter,SortOption} from "./types";
+import {Task, Filter,SortOption,Project} from "./types";
 import FilterBar from "./FilterBar";
 import SearchBar from "./SearchBar";
 import SortBar from "./SortBar";
+import ProjectBar from "./ProjectBar";
+import ProjectForm from "./ProjectForm";
 
 export default function Dashboard() {
     const [tasks, setTasks] = useState<Task[]>(() => {
@@ -24,6 +25,7 @@ export default function Dashboard() {
                 completed: false,
                 priority: "high",
                 dueDate: "2026-08-15",
+                projectId: 1,
             },
 
             {
@@ -32,6 +34,7 @@ export default function Dashboard() {
                 completed: false,
                 priority: "medium",
                 dueDate: "2021-02-14",
+                projectId: 2,
             },
 
             {
@@ -40,11 +43,26 @@ export default function Dashboard() {
                 completed: false,
                 priority: "low",
                 dueDate: "2024-12-20",
+                projectId: 3,
             },
 
         ];
     });
 
+    const [projects, setProjects] = useState<Project[]>([
+        {
+            id: 1,
+            name: "Facultad",
+        },
+        {
+            id: 2,
+            name: "Trabajo",
+        },
+        {
+            id: 3,
+            name: "Personal",
+        },
+    ]);
 
     const toggleTask = (id: number) => {
         setTasks(
@@ -85,6 +103,7 @@ export default function Dashboard() {
 
     const [sortOption, setSortOption] = useState<SortOption>("newest");
 
+    const [selectedProject, setSelectedProject] = useState<number | "all">("all");
 
     const stats = [
         {
@@ -120,7 +139,12 @@ export default function Dashboard() {
             .toLowerCase()
             .includes(search.toLowerCase());
 
-        return matchesFilter && matchesSearch;
+        const matchesProject =
+            selectedProject === "all"
+                ? true
+                : task.projectId === selectedProject;
+
+        return matchesFilter && matchesSearch && matchesProject;
     });
 
     const sortedTasks = [...filteredTasks];
@@ -165,8 +189,21 @@ export default function Dashboard() {
                 ))}
             </div>
 
+            <ProjectForm
+                onAddProject={(name) =>
+                    setProjects((prevProjects) => [
+                        ...prevProjects,
+                        {
+                            id: Date.now(),
+                            name,
+                        },
+                    ])
+                }
+            />
+
             <TaskForm
-                onAddTask={(newTask, priority,dueDate) =>
+                projects={projects}
+                onAddTask={(newTask, priority,dueDate,projectId) =>
                     setTasks((prevTasks) => [
                         ...prevTasks,
                         {
@@ -175,9 +212,16 @@ export default function Dashboard() {
                             completed: false,
                             priority,
                             dueDate,
+                            projectId,
                         },
                     ])
                 }
+            />
+
+            <ProjectBar
+                projects={projects}
+                selectedProject={selectedProject}
+                onSelectProject={setSelectedProject}
             />
 
             <SearchBar
@@ -197,6 +241,7 @@ export default function Dashboard() {
 
             <TaskList
                 tasks={sortedTasks}
+                projects={projects}
                 onToggleTask={toggleTask}
                 onDeleteTask={deleteTask}
                 onEditTask={editTask}

@@ -8,4 +8,10 @@ export type Task = {
     completed: boolean;
     priority: Priority;
     dueDate: string;
+    projectId: number;
+};
+
+export type Project = {
+    id: number;
+    name: string;
 };

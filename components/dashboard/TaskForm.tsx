@@ -1,15 +1,17 @@
 "use client";
 import { useState } from "react";
-import { Priority } from "./types";
+import { Project, Priority } from "./types";
 
 type TaskFormProps = {
-    onAddTask: (task: string, priority: Priority, dueDate: string) => void;
+    projects: Project[];
+    onAddTask: (task: string, priority: Priority, dueDate: string,projectId: number) => void;
 };
 
-export default function TaskForm({ onAddTask }: TaskFormProps) {
+export default function TaskForm({ projects,onAddTask }: TaskFormProps) {
     const [task, setTask] = useState("");
     const [priority, setPriority] = useState<Priority>("medium");
     const [dueDate, setDueDate] = useState("");
+    const [projectId, setProjectId] = useState(1);
 
     return (
         <div className="mt-10">
@@ -34,9 +36,23 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
                 onChange={(e) => setPriority(e.target.value as Priority)}
                 className="w-full border rounded-lg px-4 py-2 mt-4"
             >
-                <option value="low">🟢 Baja</option>
-                <option value="medium">🟡 Media</option>
-                <option value="high">🔴 Alta</option>
+                <h2 className="text-black">
+                    <option value="low">🟢 Baja</option>
+                    <option value="medium">🟡 Media</option>
+                    <option value="high">🔴 Alta</option>
+                </h2>
+            </select>
+            
+            <select
+                value={projectId}
+                onChange={(e) => setProjectId(Number(e.target.value))}
+                className="w-full border rounded-lg px-4 py-2 mt-4"
+            >
+                {projects.map((project) => (
+                <option key={project.id} value={project.id} className="text-black">
+                    {project.name}
+                </option>
+                ))}
             </select>
 
             <input
@@ -48,12 +64,12 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
 
             <button onClick={() => {
                     if (task.trim() === "") return;
-                        onAddTask(task, priority, dueDate);
+                        onAddTask(task, priority, dueDate,projectId);
                         setTask("");
                         setPriority("medium");
                         setDueDate("");
                 }}
-                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg"
+                className="mt-4 bg-blue-600 text-black px-4 py-2 rounded-lg"
             >
                 Agregar
             </button>

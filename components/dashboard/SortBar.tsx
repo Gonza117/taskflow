@@ -15,10 +15,12 @@ export default function SortBar({
             onChange={(e) => onSortChange(e.target.value as SortOption)}
             className="border rounded-lg px-4 py-2 mt-4"
         >
-            <option value="newest">Más nuevas</option>
-            <option value="oldest">Más antiguas</option>
-            <option value="priority">Prioridad</option>
-            <option value="dueDate">Fecha de vencimiento</option>
+            <h2 className="text-black">
+                <option value="newest">Más nuevas</option>
+                <option value="oldest">Más antiguas</option>
+                <option value="priority">Prioridad</option>
+                <option value="dueDate">Fecha de vencimiento</option>
+            </h2>
         </select>
     );
 }

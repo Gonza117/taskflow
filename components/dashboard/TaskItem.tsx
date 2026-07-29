@@ -1,15 +1,16 @@
-import { Task } from "./types";
+import { Task, Project } from "./types";
 import { useState } from "react";
 
 type TaskItemProps = {
     task: Task;
+    projects: Project[];
     onToggleTask: (id: number) => void;
     onDeleteTask: (id: number) => void;
     onEditTask: (id: number, newText: string) => void;
 };
 
 
-export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: TaskItemProps) {
+export default function TaskItem({task,projects,onToggleTask,onDeleteTask,onEditTask,}: TaskItemProps) {
     const [isEditing, setIsEditing] = useState(false);
 
     const [editedText, setEditedText] = useState(task.text);
@@ -24,6 +25,10 @@ export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: T
                 return "Baja";
         }
     };
+
+    const project = projects.find(
+        (project) => project.id === task.projectId
+    );
 
     if (isEditing) {
         return (
@@ -130,6 +135,10 @@ export default function TaskItem({task,onToggleTask,onDeleteTask,onEditTask,}: T
                         }`}
                     >
                         {task.completed ? "✅" : "⬜"} {task.text}
+                    </p>
+
+                    <p className="text-sm text-blue-600 mt-2">
+                        📂 {project?.name}
                     </p>
 
                     {dueStatus === "overdue" && (

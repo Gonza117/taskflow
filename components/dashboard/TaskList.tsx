@@ -1,15 +1,15 @@
-import { Task } from "./types";
+import { Task,Project } from "./types";
 import TaskItem from "./TaskItem";
 
 type TaskListProps = {
     tasks: Task[];
+    projects: Project[];
     onToggleTask: (id: number) => void;
     onDeleteTask: (id: number) => void;
     onEditTask: (id: number, newText: string) => void;
 };
 
-
-export default function TaskList({tasks,onToggleTask,onDeleteTask,onEditTask,}: TaskListProps){
+export default function TaskList({tasks,projects,onToggleTask,onDeleteTask,onEditTask,}: TaskListProps){
     return (
         <div className="mt-10">
             <h2 className="text-xl font-semibold mb-4">
@@ -21,6 +21,7 @@ export default function TaskList({tasks,onToggleTask,onDeleteTask,onEditTask,}: 
                     <TaskItem
                         key={task.id}
                         task={task}
+                        projects={projects}
                         onToggleTask={onToggleTask}
                         onDeleteTask={onDeleteTask}
                         onEditTask={onEditTask}
