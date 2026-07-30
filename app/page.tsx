@@ -1,6 +1,6 @@
-import Navbar from "../components/layout/Navbar";
-import Sidebar from "../components/layout/Sidebar";
-import Dashboard from "../components/dashboard/Dashboard";
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+import Dashboard from "../components/Dashboard";
 
 export default function Home() {
   return (

@@ -1,4 +1,4 @@
-import { Filter } from "./types";
+import { Filter } from "../types";
 
 type FilterBarProps = {
     filter: Filter;

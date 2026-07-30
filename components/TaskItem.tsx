@@ -1,4 +1,4 @@
-import { Task, Project } from "./types";
+import { Task, Project } from "../types";
 import { useState } from "react";
 
 type TaskItemProps = {

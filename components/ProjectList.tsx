@@ -1,4 +1,4 @@
-import { Project, Task } from "./types";
+import { Project, Task } from "../types";
 
 type ProjectListProps = {
     projects: Project[];

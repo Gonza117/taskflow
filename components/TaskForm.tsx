@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Project, Priority } from "./types";
+import { Project, Priority } from "../types";
 
 type TaskFormProps = {
     projects: Project[];
@@ -36,11 +36,9 @@ export default function TaskForm({ projects,onAddTask }: TaskFormProps) {
                 onChange={(e) => setPriority(e.target.value as Priority)}
                 className="w-full border rounded-lg px-4 py-2 mt-4"
             >
-                <h2 className="text-black">
-                    <option value="low">🟢 Baja</option>
-                    <option value="medium">🟡 Media</option>
-                    <option value="high">🔴 Alta</option>
-                </h2>
+                <option value="low" className="text-black">🟢 Baja</option>
+                <option value="medium" className="text-black">🟡 Media</option>                    
+                <option value="high" className="text-black">🔴 Alta</option>
             </select>
             
             <select
