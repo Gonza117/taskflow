@@ -9,6 +9,7 @@ import SearchBar from "./SearchBar";
 import SortBar from "./SortBar";
 import ProjectBar from "./ProjectBar";
 import ProjectForm from "./ProjectForm";
+import ProjectList from "./ProjectList";
 
 export default function Dashboard() {
     const [tasks, setTasks] = useState<Task[]>(() => {
@@ -77,6 +78,12 @@ export default function Dashboard() {
     const deleteTask = (id: number) => {
         setTasks((prevTasks) =>
             prevTasks.filter((task) => task.id !== id)
+        );
+    };
+
+    const deleteProject = (id: number) => {
+        setProjects((prevProjects) =>
+            prevProjects.filter((project) => project.id !== id)
         );
     };
 
@@ -201,6 +208,12 @@ export default function Dashboard() {
                 }
             />
 
+            <ProjectList
+                projects={projects}
+                tasks={tasks}
+                onDeleteProject={deleteProject}
+            />
+
             <TaskForm
                 projects={projects}
                 onAddTask={(newTask, priority,dueDate,projectId) =>
@@ -246,7 +259,6 @@ export default function Dashboard() {
                 onDeleteTask={deleteTask}
                 onEditTask={editTask}
             />
-
         </div>
     );
 }

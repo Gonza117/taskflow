@@ -165,10 +165,14 @@ export default function TaskItem({task,projects,onToggleTask,onDeleteTask,onEdit
                         ✏️
                     </button>
 
-                    <button className="hover:scale-110 transition"
+                    <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            onDeleteTask(task.id);
+                            const confirmDelete = window.confirm(
+                                `¿Eliminar la tarea "${task.text}"?`
+                            );
+                            if (!confirmDelete) return;
+                                onDeleteTask(task.id);
                         }}
                     >
                         🗑️
